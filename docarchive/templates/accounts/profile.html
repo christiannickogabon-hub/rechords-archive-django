@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}My profile{% endblock %}
+{% block content %}
+<div class="page-head" style="justify-content:center; text-align:center;"><div><div class="eyebrow">Your account</div><h1>My profile</h1></div></div>
+
+<div class="card" style="max-width:760px; margin:0 auto; padding:2rem 2.2rem;">
+  <div style="display:flex; align-items:center; justify-content:center; gap:1.4rem; margin-bottom:1.8rem;">
+    {% if user.avatar %}
+      <img class="avatar avatar-lg" style="width:128px; height:128px;" src="{{ user.avatar.url }}" alt="{{ user }}">
+    {% else %}
+      <div class="avatar avatar-placeholder avatar-lg" style="width:128px; height:128px; font-size:2.4rem;">{{ user.initials }}</div>
+    {% endif %}
+    <div style="text-align:left;">
+      <div style="font-weight:600; font-size:1.45rem;">{{ user.get_full_name|default:user.username }}</div>
+      <div class="helptext" style="margin-top:.25rem; font-size:1rem;">{{ user.role_label }}{% if user.office %} · {{ user.office }}{% endif %}</div>
+    </div>
+  </div>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in form %}{% include "form_field.html" %}{% endfor %}
+    <div class="btn-row" style="justify-content:center;">
+      <button class="btn" type="submit"><svg class="icon"><use href="#icon-check"/></svg>Save changes</button>
+      <a class="btn btn--quiet" href="{% url 'accounts:password_change' %}"><svg class="icon"><use href="#icon-lock"/></svg>Change password</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
